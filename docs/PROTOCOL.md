@@ -130,10 +130,21 @@ is precisely a tier-2 concern — see [`ARCHITECTURE.md`](ARCHITECTURE.md).
 - **Statelessness.** No `initialize`, no `Mcp-Session-Id`. Cross-call state becomes server-minted
   handles passed as ordinary tool arguments. The five `stdio` servers hold little per-session state,
   so this lands mostly on hosting.
-- **Required caching metadata.** `DiscoverResult` already carries `ttl_ms`, `cache_scope` and
-  `result_type`. **This is the item that can be quietly wrong rather than loudly broken:** all four
-  servers filter their tool surface by configuration, so a wrong `cache_scope` on a policy-filtered
-  `tools/list` would let one caller's filtered surface be served to another.
+- **Required caching metadata — now confirmed normative.** Servers **MUST** include `ttlMs` and
+  `cacheScope` on `tools/list`, `server/discover` and the other list results. `cacheScope` has two
+  values, and `"private"` means *"Caches **MUST NOT** be shared across authorization contexts (e.g.
+  a different access token requires a different cache)"* — explicitly the right choice *"for
+  filtered list results that vary per user."*
+
+  **This is the item that can be quietly wrong rather than loudly broken**, and the specification
+  says so: a `"public"` result from an authenticated `tools/list` *"may be shared outside of the
+  initial request's authorization context."* All four servers filter their tool surface by
+  configured capability, so every one of them needs `"private"`.
+
+  Two corollaries. Servers **MUST** apply the same `cacheScope` to every page of a paginated list.
+  And servers **MUST NOT** rely on `cacheScope` alone to prevent unauthorized access — **filtering
+  a tool list is not authorization**; the per-tool check still has to run at call time. See
+  [`../research/orchestration/`](../research/orchestration/).
 - **OAuth DCR (RFC 7591) is deprecated** in favour of Client ID Metadata Documents — so the hosted
   design must not be built on it.
 - **Credentials keyed by issuer** (SEP-2352): never reuse a registration across authorization

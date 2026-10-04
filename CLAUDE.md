@@ -17,7 +17,11 @@ skeleton is harder to review than a plan, which is the whole reason this reposit
 |---|---|
 | [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) | the known weak points and open questions — **start here** |
 | [`docs/EVIDENCE.md`](docs/EVIDENCE.md) | what is actually duplicated, measured, with the method |
+| [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) | how others do this — and the three findings that changed the plan |
+| [`docs/ESTATE.md`](docs/ESTATE.md) | the whole CSA MCP estate; this repo is one half of it |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the four tiers and what must never be shared |
+| [`docs/CI-CD.md`](docs/CI-CD.md) | the pipeline, derived from the servers' existing 15 workflows |
+| [`research/`](research/) | the evidence under all of it. **[`research/METHOD.md`](research/METHOD.md) is the research standard** — best practice *and* what the big players actually ship |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | which protocol revision the fleet speaks |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | the ordered steps, and the two that fail silently |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | ADR-001 to ADR-005, each with rejected alternatives |
@@ -37,8 +41,8 @@ the four servers use *four different shapes* for theirs, which collides at migra
 
 ## How to work here
 
-**Measure before asserting.** Every number in `docs/` is reproducible and most of them have a
-one-line command in the review brief. If you are about to write a claim about the fleet, run the
+**Measure before asserting.** Every number in `docs/` is reproducible — `research/fleet-survey/
+measure.py` re-derives the survey, and the review brief gives a one-line check per claim. If you are about to write a claim about the fleet, run the
 check instead. Two claims in these documents were wrong on the first pass and were caught this
 way — a similarity score read as behavioural drift when the diff was docstring-only, and an "extra
 that installs nothing" that turned out to be a deliberate, commented compatibility alias.
@@ -49,6 +53,13 @@ disagree, the source is what we run.
 **A negative result you measured beats a paraphrase.** *"No server in the fleet pins a protocol
 version"* is a finding. *"The servers probably use the default"* is not.
 
+**Primary sources only for anything you act on.** Secondary sources about this protocol lag it by
+about a revision and do not say so — the DCR case in `research/fleet-survey/SOURCES.md` is the
+worked example. Catalogue and aggregator sites are not cited at all.
+
+**Tag research findings** `[measured]`, `[reported]` or `[inferred]`, and date them. Untagged, the
+three read as equally solid.
+
 **Keep the documents short.** They are context for AI sessions working on other repositories. Length
 defeats the purpose.
 
@@ -58,7 +69,12 @@ something, name the measured number that justifies it.
 
 **Convention is not code.** `server.py`, `cli.py` and `_tools/_base.py` measure 10–15% similar. They
 get documentation and a scaffold template, never a base class. See ADR-004 before proposing
-otherwise.
+otherwise — and note that Cloudflare reached the same conclusion across fifteen servers, shipping
+`implementation-guides/` and a server *factory* rather than inheritance.
+
+**`servers/` holds servers; `packages/` holds what they share.** Structural, not conventional,
+adopted from Cloudflare's monorepo. A new shared module goes in `packages/csa-mcp` only if it clears
+ADR-001's bar.
 
 ## Commit subjects
 

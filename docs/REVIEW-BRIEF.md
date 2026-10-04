@@ -68,6 +68,47 @@ If a number is wrong, the conclusion resting on it probably is too. Say which.
 7. **The protocol revision the servers actually speak is unknown**, not measured. Several decisions
    downstream of [`PROTOCOL.md`](PROTOCOL.md) would change if the answer is surprising.
 
+## What the research changed, so a reviewer can check the reasoning
+
+[`PRIOR-ART.md`](PRIOR-ART.md) was written after the architecture and **altered it in three places**
+rather than confirming it. That is worth checking, because a prior-art document that only agrees
+with the plan it follows is not evidence.
+
+1. **The layout changed.** Cloudflare's MCP monorepo separates `apps/` (servers) from `packages/`
+   (shared code); everything here had been under one `packages/`. Adopted as `servers/` +
+   `packages/` — the same structural split, with the accurate noun for packages we publish rather
+   than Workers we deploy.
+2. **"One repository per language" was reopened.** The official reference monorepo mixes TypeScript
+   and Python in one tree. See [`ESTATE.md`](ESTATE.md) — not decided, and it does not block this
+   repository.
+3. **The DCR warning became sourced rather than asserted**, and the secondary literature turned out
+   to be a revision behind on it.
+
+Two findings strengthened existing decisions instead: the official monorepo has **no shared library
+at all**, which supports ADR-001's narrow bar; and the specification says a stdio server
+**SHOULD NOT** use OAuth and should take credentials from the environment, which is what CSA already
+does.
+
+## The two biggest questions the survey opened
+
+**1. One `uv.lock` or five?** ADR-002 argued one, and carries a correction saying that is no longer
+obviously right: AWS runs **62** Python MCP servers with no workspace and a lockfile per server,
+sharing a root `.ruff.toml` instead. Five servers make the coupling far more tractable than 62, so
+AWS's choice does not settle ours — but the burden has shifted. ADR-006 now takes the root-config
+half independently, so this question can be answered either way without blocking anything.
+
+**2. Should there be three Google servers?** `csa-google-workspace` (59 tools),
+`csa-google-gmail-calendar` (50) and `csa-google-workspace-audit` (planned) are one vendor split
+three ways — and they are the three sharing the 58–60% OAuth trio *because* of that split. GitHub
+runs **one** server with `--toolsets`; Microsoft's Azure server covers 57 services in 276 tools. The
+counter-argument is CSA's own: one Google app per server is one revocable credential with the
+narrowest scopes, and merging means a single client holding the union of Docs, Sheets, Slides,
+Drive, Gmail, Calendar and tenant-audit scopes. **Context pressure against credential blast
+radius.** Not decided; see [`PRIOR-ART.md`](PRIOR-ART.md) §5.
+
+The context-pressure number is measured: **241 tools across the four servers**, commonly all
+connected at once, `csa-skilljar` alone at 114.
+
 ## Questions I would most like answered
 
 - Does the ≥95%-or-no-incumbent bar in ADR-001 hold up, or is it a rule invented to make the answer
@@ -81,6 +122,14 @@ If a number is wrong, the conclusion resting on it probably is too. Say which.
   are invisible to it. How much is hiding there?
 - Should `csa-google-workspace-audit` be built *before* the migration rather than after, as the
   first consumer of the scaffold and a test of whether the conventions are real?
+- **One monorepo per language, or one for everything?** The official reference monorepo mixes
+  TypeScript and Python. The counter-argument is that CSA's TypeScript servers are Workers-deployed
+  rather than npm-published, so they share no build, release or runtime with a PyPI package.
+  [`ESTATE.md`](ESTATE.md) states both sides and settles neither.
+- **Is the CI aggregator pattern right?** [`CI-CD.md`](CI-CD.md) argues that path-filtered jobs
+  cannot be required status checks directly — a required check that never runs reads as *pending*
+  forever and deadlocks the branch rule — so one always-runs aggregator job becomes the only
+  required check. Is there a cleaner approach?
 
 ## Deliberately absent
 
@@ -89,8 +138,9 @@ Not oversights:
 - **No code.** No `pyproject.toml`, no workflows, no `uv.lock`, no source. Those encode decisions
   not yet approved, and a half-built skeleton is harder to review than a plan.
 - **No `csa-mcp` implementation**, not even stubs. Its contents are the subject of ADR-001.
-- **No CI, no branch protection.** CSA's public-repo standards apply and cannot be met before there
-  is something to gate. Flagged in [`MIGRATION.md`](MIGRATION.md).
+- **No CI.** Nothing to gate yet; the plan is in [`CI-CD.md`](CI-CD.md) and `main` requires zero
+  status checks until the jobs exist. Branch protection itself **is** now configured — PR required,
+  0 approvals, force-push blocked — see [`../BACKUP-RESOURCES.md`](../BACKUP-RESOURCES.md).
 - **No timeline.** Sequencing is specified; dates are not.
 - **No TypeScript.** CSA's Cloudflare Workers MCP servers are a separate assessment with a different
   SDK and a different deprecation exposure.

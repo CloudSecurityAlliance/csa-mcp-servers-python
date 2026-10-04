@@ -39,6 +39,146 @@ Created 2026-10-03.
   currently prevents `csa-mcp` growing past its measured justification.
   [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) weakness 4.
 
+## Opened by the prior-art research (2026-10-04)
+
+- [ ] **Re-run `research/fleet-survey/measure.py`** when a protocol revision ships, when `ext-auth`
+  moves (static since 2026-06-18), or before acting on the lockfile or Google-granularity questions
+  — both rest on numbers in that survey.
+- [ ] **The migration window is dated.** Four of six CSA MCP repos are under 40 days old, so the
+  drift appeared in a burst rather than accumulating; the cost of consolidating rises weekly.
+  [`research/fleet-survey/TIMELINE.md`](research/fleet-survey/TIMELINE.md).
+
+- [ ] **Decide: one `uv.lock` or one per server?** ADR-002 argued one; its appended correction says
+  AWS runs 62 Python MCP servers with none, sharing root tooling config instead. ADR-006 takes the
+  root-config half independently so this is not blocking.
+- [ ] **Adopt root tooling config** — `.ruff.toml`, `.python-version`, `.pre-commit-config.yaml`,
+  `.gitleaks.toml` (ADR-006). This is the direct fix for the `ruff`/`mypy` floor divergence, and it
+  is cheaper than the lockfile.
+- [ ] **Decide: three Google servers, or one with toolsets?** 241 tools across four servers, 109 of
+  them Google, and the 58–60% OAuth duplication exists *because* of the split. Trade-off is context
+  pressure against credential blast radius. [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) §5.
+- [ ] **Consider per-session toolset selection.** CSA already gates tools by configured capability —
+  an unenabled capability does not appear as a tool at all. What is missing is per-session selection
+  and runtime discovery, which is what GitHub's `--dynamic-toolsets` provides.
+
+- [ ] **Decide: one monorepo per language, or one for everything?** The official MCP reference
+  monorepo mixes TypeScript and Python in one tree; CSA's TypeScript servers are Workers-deployed
+  rather than npm-published. [`docs/ESTATE.md`](docs/ESTATE.md) states both sides.
+- [ ] **Read the Enterprise-Managed Authorization extension** before designing hosted agent
+  delegation — it is *stable* in `modelcontextprotocol/ext-auth` and is the nearest thing to the
+  "user authorises, then nominates which agents may use it" model. Listed, not read.
+- [ ] **The Client Credentials extension is in draft** and `csa-skilljar` already uses that grant.
+  Check its hosted behaviour against the extension rather than inventing it.
+- [ ] **Do not build on SDK identity assertion yet.** `IdentityAssertionParams` /
+  `exchange_identity_assertion` ship in `mcp` 2.3.0 but **no matching extension is listed** in
+  `ext-auth` — the SDK is ahead of, or divergent from, the registry.
+- [ ] **Assess whether a gateway belongs in front of the hosted fleet.** The dominant 2026
+  enterprise pattern, entirely unassessed for CSA. Not this repository's scope, but it is nobody's
+  right now.
+- [ ] **`CSA-MCP-Core` and `csa-mcp` were never inspected** — not cloned, not found by repo search.
+  Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
+  measurement.
+
+## Consumers (2026-10-04, `research/consumers/`)
+
+- [ ] **C3 is unvalidated and blocking.** Can a working-group member on a locked-down corporate
+  endpoint install anything, or is **browser-only** the design floor? Every constraint listed for C3
+  is plausible and **none is confirmed** — nobody has asked a real WG member. It is the consumer with
+  a constraint CSA cannot negotiate, and it lands on CSA's core constituency.
+- [ ] **No test tenant exists (C5).** A dev agent experimenting against these servers today uses
+  **production credentials against production data**. Prerequisite for AI-assisted development here;
+  currently nobody owns it.
+- [ ] **Each ADR should name which consumers it serves.** Most currently imply C1/C2 without saying
+  so, which is how the whole plan came to be decided consumer-blind.
+- [ ] **Disambiguate "consumer".** ADR-001 means *second consumer of a library*;
+  `research/consumers/` means *human or agent user*. The collision went unnoticed.
+- [ ] **C6 needs no design, only invariants** — see the core finding. Revisit when ID-JAG (`-04`) and
+  OAuth Identity Chaining (`-12`) become RFCs rather than drafts.
+- [ ] **Put expiries on claims, not just dates.** Per `research/METHOD.md`: the installed-version
+  layer expires in **1 day**, our own repo state in ~30, secondary literature in ~4 months, the
+  protocol in ~5. "Measured 2026-10-04, re-check when a revision ships" is actionable; a bare date
+  is not.
+
+## Service identity (2026-10-04, `research/service-identity/`)
+
+- [ ] **Phase 0 is a precondition, not a task: can a service account join a CSA Google Group and
+  inherit its Drive ACLs?** A service account is **not** a Workspace-domain user, and *"service
+  agents cannot be added to Google Groups unless external members are allowed."* The whole
+  entitlement-reuse premise rests on this. Ten-step test and exit criterion are in the source
+  report. **Build nothing downstream until it passes.**
+- [x] **DWD conflict resolved.** Not "never DWD" — *default* service identity, *exception* DWD where
+  named-user identity has a concrete benefit. A tenant audit is the textbook exception.
+  **Remaining:** `csa-google-workspace-audit`'s ADR should name the concrete benefit that cannot be
+  achieved with a service identity.
+- [ ] **Adopt subject / actor / execution principal as distinct concepts.** No vendor will ever see
+  the actor, so the agent's identity exists only if CSA's control plane records it. Agent identity is
+  a provenance obligation we already have, not a protocol feature to wait for.
+- [ ] **Candidates for `csa-mcp` under ADR-001's no-incumbent exception:** execution-profile
+  resolution, and the provenance record shape (§6.5 of the report). The second is a *vocabulary*
+  problem — the same class as three different answers to "am I authenticated?"
+- [ ] **Note that this is a different product from what exists.** All four servers are per-user
+  credential; **none uses a service account**. `csa-google-workspace` is `InstalledAppFlow` with
+  token material across 22 files and **no impersonation path** (verified). A credential broker cannot
+  exist in a local stdio server.
+- [ ] **Group-union risk has no tooling.** Adding an execution identity to a widely used group grants
+  the union of that group's access; the mitigation is "enumerate effective access", which across a
+  messy Drive hierarchy is the hard part. Unsolved in the source report too.
+
+## Platform reach (2026-10-04, `research/managed-agents/`)
+
+- [ ] **None of the five stdio servers can attach to Claude Managed Agents.** Verified: the
+  connector's `type` *"Must be `"url"`"*. Decide the path — tunnels, a sandbox worker as MCP client,
+  or remote HTTP — and note that running CLIs in the sandbox instead **bypasses all 1,838 lines of
+  server-side policy**. This moves hosted from a later phase to a precondition.
+- [ ] **Design `csa-google-workspace-audit` remote-first** if the platform matters; it is the one
+  server not yet built.
+- [ ] **Reconcile domain-wide delegation.** An external synthesis says *never* use DWD for per-agent
+  Google access; CINO-PE records `csa-google-workspace-audit` as using exactly that, *"no ACL ceiling
+  beneath it."* Probably not a contradiction — different questions — but two authoritative documents
+  give opposite guidance on one mechanism and the audit server is where they meet. Needs a sentence
+  in its ADR.
+- [ ] **Allowlist tools per agent.** Managed Agents enables **all** server tools by default;
+  attaching `csa-skilljar` adds 114 unless `default_config.enabled: false` is set.
+- [ ] **Measure where CSA sits in MCPHunt's 11.5%–41.3%** range for cross-server data propagation —
+  it measured multi-server setups, which is exactly our four-server configuration. Turns the untested
+  gap in `research/enforcement/` into an experiment.
+
+## Orchestration and disclosure (2026-10-04, `research/orchestration/`)
+
+- [ ] **Set `cacheScope: "private"` on every identity- or configuration-filtered list result.**
+  Confirmed normative; all four servers filter. A `"public"` list from an authenticated call *"may
+  be shared outside of the initial request's authorization context."* Same scope on every page.
+- [ ] **Keep enforcing per-tool policy at call time.** The spec: **MUST NOT** rely on `cacheScope`
+  alone. Hiding a tool is context management, not protection.
+- [ ] **Honour deterministic `tools/list` ordering** — cheap, and it exists for prompt-cache hits.
+- [ ] **Measure what 241 tool definitions actually cost in tokens.** Unmeasured, and it decides
+  whether progressive disclosure is urgent or theoretical here.
+- [ ] **Record the disclosure rule in `docs/ESTATE.md`.** CSA already runs both patterns — `csa-mcp`
+  is one endpoint with tiers 1–5 and plugin capabilities; the Python fleet is four servers with no
+  disclosure control. Nothing writes down which shape is for what.
+- [ ] **Track `modelcontextprotocol/progressive-disclosure-wg`** — grouping is a draft SEP opened
+  2026-09-28. Do not build on it. Note issue #15, *"limits of tool search"*.
+- [ ] **Read `programmatic tool calling` / code mode** — the second pattern in the same spec
+  document, unexamined. Its framing matters for us: *"Tool results from one server are untrusted
+  input to another."*
+
+## Enforcement (2026-10-04, `research/enforcement/`)
+
+- [ ] **Extract the untrusted-content wrapping primitive into `csa-mcp`** (ADR-007). Measured at
+  **1%/2%/11%** similar across three servers, with a fourth having no module — the least consistent
+  control in the fleet, and the only one whose failure lets injected content act with the user's
+  credential. This **reverses** an earlier not-an-extraction-candidate call.
+- [ ] **Say in the docs what local policy is for**, rather than apologising for it: it binds the
+  *model*, not the user, and that is the correct scope. Policy is env-only and three of four servers
+  already tell the model it *"cannot be changed from here"* — keep that property.
+- [ ] **Test whether the policy actually holds under injection.** 241 tool registrations,
+  `destructive_hint` ×37, `confirm=` ×9, `dry_run` ×3. Whether a determined injected instruction can
+  route around the allowlists is **untested**, and that is a real gap.
+- [ ] **Adopt Off / Monitoring / Enforcing staging** for any new policy, local or hosted — observe
+  before blocking. Taken from commercial gateway products.
+- [ ] **Read AWS's and Microsoft's agent-governance offerings.** Only Google's Agent Gateway was
+  examined, because Google is the vendor CSA depends on most.
+
 ## Protocol
 
 - [ ] **Measure which revision each server negotiates** with real clients. Currently unknown, and

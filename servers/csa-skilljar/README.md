@@ -6,8 +6,8 @@ MCP server for Skilljar — courses, lessons, quizzes, learners, groups and enro
 
 ## Notes for the migration
 
-- Carries a **100% coverage gate**, verified at 100.00% including on Windows. Must survive the move
-  intact.
+- Carries a **100% coverage gate** with branches, verified at 100.00% including on Windows. All
+  four servers do; this one was verified end to end. Must survive the move intact.
 - The only server with **no interactive sign-in by design** — v2 uses the OAuth
   `client_credentials` grant, where the credential *is* the identity, so there is no browser step
   and no person to log in as. Its `check_access` tool is the model the shared status vocabulary

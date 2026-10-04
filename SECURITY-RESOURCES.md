@@ -40,14 +40,65 @@ package-scoped. Nothing in this file should grow to restate them.
 
 **Vendor content reaching a model is untrusted data, never instructions.** A ticket body, a mail
 subject, a document comment or a learner-submitted field may contain text shaped like a command.
-Every server here draws that boundary, and the shared library planned in
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) must not weaken it: `mcp/_untrusted.py` measures 11%
-similar across two servers and is explicitly **not** an extraction candidate.
+Every server draws that boundary — and measurement showed it is the **least consistent control in
+the fleet**, which is the opposite of what it should be.
+
+| server | handling | lines |
+|---|---|---|
+| `csa-zendesk` | `csa_zendesk/_untrusted.py`, at package root | **404** |
+| `csa-google-gmail-calendar` | `.../mcp/_untrusted.py` | 142 |
+| `csa-google-workspace` | `.../mcp/_untrusted.py` | 119 |
+| `csa-skilljar` | no module; inline across 7 files | — |
+
+Pairwise similarity of the three modules: **1%, 2%, 11%** — four independent implementations, one
+at a different architectural layer, one absent. For comparison `_markdown.py` is 96% shared. The
+prompt-injection boundary is less consistent than anything else measured, and it is the only control
+whose failure lets injected content act with the user's credential.
+
+> **Correction (2026-10-04).** An earlier version of this file recorded `_untrusted.py` at 11% as
+> *"explicitly not an extraction candidate"*, applying the same reasoning that keeps `server.py` at
+> 10% out of the shared library. **That was wrong**, and the test that separates the two cases is
+> whether a single correct behaviour exists. *"What should my CLI do?"* legitimately varies per
+> server. *"How do I mark vendor content so a model treats it as data rather than instructions?"*
+> has one right answer, and four servers each invented their own. Low similarity is divergence in
+> the first case and a **missing shared primitive** in the second.
+>
+> The wrapping mechanism belongs in `csa-mcp`; the vendor content *shapes* stay with their vendors.
+> See [`research/enforcement/`](research/enforcement/).
 
 Two protocol-level constraints are also recorded in [`docs/PROTOCOL.md`](docs/PROTOCOL.md) because
 they bind the hosted design before it is written: **do not build on OAuth Dynamic Client
 Registration** (deprecated in `2026-07-28`), and **key credentials by issuer**, never reusing a
 registration across authorization servers.
+
+## What local policy can and cannot do
+
+Worth stating plainly rather than leaving implicit, because it is routinely misread in both
+directions. A local `stdio` server runs as the user, with the user's credential, so **its policy
+cannot bind the user** — and it never needed to. The user can already open Gmail in a browser.
+
+What it binds is **the agent acting for the user**, including one that has been prompt-injected by
+content it just read. Against that adversary it is real enforcement, because policy is set in the
+environment — 40 `CSA_*` variables across the fleet — and the model cannot edit an environment
+variable or restart a process. Three of four servers say so in their instructions: the policy
+*"cannot be changed from here."*
+
+Hosting changes **who** the policy binds, not what it says. That is why policy lives in the server
+rather than only in a gateway. See [`research/enforcement/`](research/enforcement/), and the
+specification's own position: *"Treating claimed scopes in token as sufficient without server-side
+authorization logic"* is listed as a common mistake.
+
+## One known-benign match, recorded before a scanner finds it
+
+[`docs/ESTATE.md`](docs/ESTATE.md) contains the string `mcptok_` — the **prefix** of CSA MCP tokens,
+named while describing another server's auth tiers. There is no token: the prefix appears alone, as
+a descriptor.
+
+It is written down because ADR-006 proposes adding `.gitleaks.toml`, and a prefix-based rule will
+match this line. The right fix then is a narrow allowance for that line, never a blanket exclusion
+of the pattern or of the file — the fleet has already seen a guard refuse its own documentation and
+be weakened in response, and a weakened guard is worse than none because it still reads as
+protection.
 
 ## Current gaps
 
