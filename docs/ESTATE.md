@@ -77,6 +77,30 @@ under `surfaces/mcp/` rather than here:
 - **No token passthrough** — a hosted server must not forward a client's token upstream
   (**MUST NOT**, `2026-07-28`).
 
+## The constraint that makes hosting a precondition, not a phase
+
+`Claude Managed Agents` accepts **only** remote MCP servers. Verified 2026-10-04 against the
+connector reference: the `type` field is *"Required. Must be `"url"`"*, and `url` is *"the endpoint
+of the remote MCP server."*
+
+**All five servers planned for this repository are `stdio`, so none of them can attach to a managed
+agent directly.** That is not a gap to configure around — the field accepts one value and it is not
+ours.
+
+The reason is structural rather than an oversight, and the specification explains it: a stdio
+transport **SHOULD NOT** follow the authorization spec and should *"retrieve credentials from the
+environment."* A stdio server is built for a local human with a local environment; a managed agent
+has neither. They are different products, not two deployments of one.
+
+So if CSA standardises agents on that platform, **hosted stops being a later phase and becomes a
+precondition.** The documented ways across the gap are MCP tunnels (research preview), a self-hosted
+sandbox worker acting as the MCP client, making the servers remote HTTP, or running CLIs in the
+sandbox — and that last one **bypasses every control the MCP server implements**, which is why it is
+the cheapest and the worst. See [`../research/managed-agents/`](../research/managed-agents/).
+
+This does not change what this repository is for. It changes when the hosted work is needed, and it
+is an argument for `csa-google-workspace-audit` — the unbuilt one — being designed remote-first.
+
 ## Where this repository fits
 
 It covers **the five Python stdio servers and nothing else.** Concretely out of scope: the

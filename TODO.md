@@ -79,6 +79,25 @@ Created 2026-10-03.
   Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
   measurement.
 
+## Platform reach (2026-10-04, `research/managed-agents/`)
+
+- [ ] **None of the five stdio servers can attach to Claude Managed Agents.** Verified: the
+  connector's `type` *"Must be `"url"`"*. Decide the path — tunnels, a sandbox worker as MCP client,
+  or remote HTTP — and note that running CLIs in the sandbox instead **bypasses all 1,838 lines of
+  server-side policy**. This moves hosted from a later phase to a precondition.
+- [ ] **Design `csa-google-workspace-audit` remote-first** if the platform matters; it is the one
+  server not yet built.
+- [ ] **Reconcile domain-wide delegation.** An external synthesis says *never* use DWD for per-agent
+  Google access; CINO-PE records `csa-google-workspace-audit` as using exactly that, *"no ACL ceiling
+  beneath it."* Probably not a contradiction — different questions — but two authoritative documents
+  give opposite guidance on one mechanism and the audit server is where they meet. Needs a sentence
+  in its ADR.
+- [ ] **Allowlist tools per agent.** Managed Agents enables **all** server tools by default;
+  attaching `csa-skilljar` adds 114 unless `default_config.enabled: false` is set.
+- [ ] **Measure where CSA sits in MCPHunt's 11.5%–41.3%** range for cross-server data propagation —
+  it measured multi-server setups, which is exactly our four-server configuration. Turns the untested
+  gap in `research/enforcement/` into an experiment.
+
 ## Orchestration and disclosure (2026-10-04, `research/orchestration/`)
 
 - [ ] **Set `cacheScope: "private"` on every identity- or configuration-filtered list result.**
