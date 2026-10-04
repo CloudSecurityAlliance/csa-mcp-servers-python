@@ -97,6 +97,21 @@ So **thirty days is the right order of magnitude for the layers that caused our 
 in both directions elsewhere: too long for "what version is installed", too short for "is a monorepo
 the right shape".
 
+> **The 30-day rule was then reviewed adversarially and did not survive as a number** — see
+> [`knowledge-half-life/`](knowledge-half-life/). The three layers above do not merely move at
+> different rates, they trend in **opposite directions**: the protocol is decelerating (112 → 202
+> day gaps), the Python SDK is flat, the TypeScript SDK has roughly doubled in a quarter to **1.4
+> days**. And architectural patterns do not decay at all — they exhibit the **Lindy effect**, where
+> age is evidence *for* reliability, which no half-life constant can describe.
+>
+> **The revised rule: half-life by layer, Lindy for architecture, and a trigger instead of a
+> timer.** For anything you will act on, record *what event would invalidate it* rather than when
+> you will look again. Decay here is event-driven, so a trigger fires exactly when the hazard does
+> and never when it doesn't.
+>
+> The established name is **half-life** in the Burton–Kebler (1960) sense — literature *"becomes
+> obsolescent rather than disintegrating."*
+
 ### The asymmetry that matters most
 
 The protocol changes about every five months. The **commentary about it is wrong within four** — and

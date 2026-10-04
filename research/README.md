@@ -23,6 +23,7 @@ usually the finding.
 | [`managed-agents/`](managed-agents/) | Can the Anthropic platform even use these servers? Reconciliation of an external research synthesis against primary sources | first pass — **found that none of the five stdio servers can attach** | **2026-10-04** |
 | [`service-identity/`](service-identity/) | Subject, actor, execution principal — shared service identities, and whether CSA's Google Groups can carry them | first pass — **resolved the DWD conflict**; found an untested precondition | **2026-10-04** |
 | [`consumers/`](consumers/) | **Who are these servers for?** Six consumers, two never analysed, and one that cannot be described | first pass — **C6 logged as a core finding: we do not know** | **2026-10-04** |
+| [`knowledge-half-life/`](knowledge-half-life/) | Adversarial review of the 30-day rule — how fast does evidence here actually expire? | **disproved the number**, four ways; kept the instinct | **2026-10-04** |
 
 ## How research here is written
 
