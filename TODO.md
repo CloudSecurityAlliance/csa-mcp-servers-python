@@ -79,6 +79,25 @@ Created 2026-10-03.
   Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
   measurement.
 
+## Orchestration and disclosure (2026-10-04, `research/orchestration/`)
+
+- [ ] **Set `cacheScope: "private"` on every identity- or configuration-filtered list result.**
+  Confirmed normative; all four servers filter. A `"public"` list from an authenticated call *"may
+  be shared outside of the initial request's authorization context."* Same scope on every page.
+- [ ] **Keep enforcing per-tool policy at call time.** The spec: **MUST NOT** rely on `cacheScope`
+  alone. Hiding a tool is context management, not protection.
+- [ ] **Honour deterministic `tools/list` ordering** — cheap, and it exists for prompt-cache hits.
+- [ ] **Measure what 241 tool definitions actually cost in tokens.** Unmeasured, and it decides
+  whether progressive disclosure is urgent or theoretical here.
+- [ ] **Record the disclosure rule in `docs/ESTATE.md`.** CSA already runs both patterns — `csa-mcp`
+  is one endpoint with tiers 1–5 and plugin capabilities; the Python fleet is four servers with no
+  disclosure control. Nothing writes down which shape is for what.
+- [ ] **Track `modelcontextprotocol/progressive-disclosure-wg`** — grouping is a draft SEP opened
+  2026-09-28. Do not build on it. Note issue #15, *"limits of tool search"*.
+- [ ] **Read `programmatic tool calling` / code mode** — the second pattern in the same spec
+  document, unexamined. Its framing matters for us: *"Tool results from one server are untrusted
+  input to another."*
+
 ## Enforcement (2026-10-04, `research/enforcement/`)
 
 - [ ] **Extract the untrusted-content wrapping primitive into `csa-mcp`** (ADR-007). Measured at
