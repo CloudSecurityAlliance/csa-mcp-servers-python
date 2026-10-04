@@ -41,6 +41,13 @@ Created 2026-10-03.
 
 ## Opened by the prior-art research (2026-10-04)
 
+- [ ] **Re-run `research/fleet-survey/measure.py`** when a protocol revision ships, when `ext-auth`
+  moves (static since 2026-06-18), or before acting on the lockfile or Google-granularity questions
+  — both rest on numbers in that survey.
+- [ ] **The migration window is dated.** Four of six CSA MCP repos are under 40 days old, so the
+  drift appeared in a burst rather than accumulating; the cost of consolidating rises weekly.
+  [`research/fleet-survey/TIMELINE.md`](research/fleet-survey/TIMELINE.md).
+
 - [ ] **Decide: one `uv.lock` or one per server?** ADR-002 argued one; its appended correction says
   AWS runs 62 Python MCP servers with none, sharing root tooling config instead. ADR-006 takes the
   root-config half independently so this is not blocking.

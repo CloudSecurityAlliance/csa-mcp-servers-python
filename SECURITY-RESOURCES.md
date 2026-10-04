@@ -49,6 +49,18 @@ they bind the hosted design before it is written: **do not build on OAuth Dynami
 Registration** (deprecated in `2026-07-28`), and **key credentials by issuer**, never reusing a
 registration across authorization servers.
 
+## One known-benign match, recorded before a scanner finds it
+
+[`docs/ESTATE.md`](docs/ESTATE.md) contains the string `mcptok_` — the **prefix** of CSA MCP tokens,
+named while describing another server's auth tiers. There is no token: the prefix appears alone, as
+a descriptor.
+
+It is written down because ADR-006 proposes adding `.gitleaks.toml`, and a prefix-based rule will
+match this line. The right fix then is a narrow allowance for that line, never a blanket exclusion
+of the pattern or of the file — the fleet has already seen a guard refuse its own documentation and
+be weakened in response, and a weakened guard is worse than none because it still reads as
+protection.
+
 ## Current gaps
 
 - ~~No branch protection on `main`~~ — **closed 2026-10-04**: PR required, force-push and

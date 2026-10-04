@@ -70,6 +70,7 @@ Read in this order. Each document assumes the one before it.
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | The ordered steps, and the two that fail silently if skipped |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | The decisions this plan makes, each with its rejected alternatives |
 | [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) | **Start here if you are reviewing this plan.** What to attack, and what is deliberately absent |
+| [`research/`](research/) | The evidence the documents rest on — surveys, measurements, and a script that re-derives every number |
 
 ### The project's own files
 

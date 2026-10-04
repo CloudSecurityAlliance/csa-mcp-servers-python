@@ -23,6 +23,23 @@ tolerated. One session of measurement found:
 None of these were caused by negligence. They were caused by comparison being expensive: it meant
 cloning four repositories and diffing by hand. Nobody does that monthly.
 
+### And the drift is five weeks old, not five years
+
+The most consequential number the survey produced is about CSA rather than anyone else. Measured
+2026-10-04: **four of six CSA MCP repositories are under 40 days old.**
+`csa-google-workspace` ran alone for roughly fourteen months (created 2025-05-27), and then **three
+servers appeared within seven days** of each other in late August 2026.
+
+So this divergence did not accumulate slowly — it appeared in a burst, when three repositories were
+created in a week and each made its own defaults. That changes the character of the work: the
+migration corrects a structural choice made last month, before which there was only one server and
+therefore no choice to make.
+
+It also dates the opportunity. The cost of consolidating rises with every week those four
+repositories accumulate commits, issues and external references — 2,982 bare issue references
+already. This is near its cheapest now. See
+[`research/fleet-survey/TIMELINE.md`](research/fleet-survey/TIMELINE.md).
+
 ## What the change buys
 
 **One lockfile makes the divergent state unrepresentable** rather than merely discouraged. That is

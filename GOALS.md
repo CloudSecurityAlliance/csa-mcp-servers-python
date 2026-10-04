@@ -14,6 +14,7 @@ about the first.
 | G4 | **`main` cannot be rewritten.** PR required, force-push and deletion blocked, enforced on admins — verified by attempting both | yes, 2026-10-04 |
 | G5 | **The decisions are decided.** ADR-001 to ADR-005 are all `proposed, pending review` | **no** |
 | G6 | **One decision-log convention across the fleet.** Four servers use four different shapes | **no** |
+| G7 | **Claims about the outside world are dated, tagged and reproducible.** `research/` carries dates, `[measured]`/`[reported]`/`[inferred]` tags, and a script that re-derives every number | yes, 2026-10-04 |
 
 ## Why the unmet ones are stated rather than fixed
 

@@ -21,6 +21,7 @@ skeleton is harder to review than a plan, which is the whole reason this reposit
 | [`docs/ESTATE.md`](docs/ESTATE.md) | the whole CSA MCP estate; this repo is one half of it |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the four tiers and what must never be shared |
 | [`docs/CI-CD.md`](docs/CI-CD.md) | the pipeline, derived from the servers' existing 15 workflows |
+| [`research/`](research/) | the evidence under all of it; `research/fleet-survey/measure.py` re-derives every number |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | which protocol revision the fleet speaks |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | the ordered steps, and the two that fail silently |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | ADR-001 to ADR-005, each with rejected alternatives |
@@ -40,8 +41,8 @@ the four servers use *four different shapes* for theirs, which collides at migra
 
 ## How to work here
 
-**Measure before asserting.** Every number in `docs/` is reproducible and most of them have a
-one-line command in the review brief. If you are about to write a claim about the fleet, run the
+**Measure before asserting.** Every number in `docs/` is reproducible — `research/fleet-survey/
+measure.py` re-derives the survey, and the review brief gives a one-line check per claim. If you are about to write a claim about the fleet, run the
 check instead. Two claims in these documents were wrong on the first pass and were caught this
 way — a similarity score read as behavioural drift when the diff was docstring-only, and an "extra
 that installs nothing" that turned out to be a deliberate, commented compatibility alias.
@@ -51,6 +52,13 @@ disagree, the source is what we run.
 
 **A negative result you measured beats a paraphrase.** *"No server in the fleet pins a protocol
 version"* is a finding. *"The servers probably use the default"* is not.
+
+**Primary sources only for anything you act on.** Secondary sources about this protocol lag it by
+about a revision and do not say so — the DCR case in `research/fleet-survey/SOURCES.md` is the
+worked example. Catalogue and aggregator sites are not cited at all.
+
+**Tag research findings** `[measured]`, `[reported]` or `[inferred]`, and date them. Untagged, the
+three read as equally solid.
 
 **Keep the documents short.** They are context for AI sessions working on other repositories. Length
 defeats the purpose.
