@@ -17,7 +17,10 @@ skeleton is harder to review than a plan, which is the whole reason this reposit
 |---|---|
 | [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) | the known weak points and open questions — **start here** |
 | [`docs/EVIDENCE.md`](docs/EVIDENCE.md) | what is actually duplicated, measured, with the method |
+| [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) | how others do this — and the three findings that changed the plan |
+| [`docs/ESTATE.md`](docs/ESTATE.md) | the whole CSA MCP estate; this repo is one half of it |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the four tiers and what must never be shared |
+| [`docs/CI-CD.md`](docs/CI-CD.md) | the pipeline, derived from the servers' existing 15 workflows |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | which protocol revision the fleet speaks |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | the ordered steps, and the two that fail silently |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | ADR-001 to ADR-005, each with rejected alternatives |
@@ -58,7 +61,12 @@ something, name the measured number that justifies it.
 
 **Convention is not code.** `server.py`, `cli.py` and `_tools/_base.py` measure 10–15% similar. They
 get documentation and a scaffold template, never a base class. See ADR-004 before proposing
-otherwise.
+otherwise — and note that Cloudflare reached the same conclusion across fifteen servers, shipping
+`implementation-guides/` and a server *factory* rather than inheritance.
+
+**`servers/` holds servers; `packages/` holds what they share.** Structural, not conventional,
+adopted from Cloudflare's monorepo. A new shared module goes in `packages/csa-mcp` only if it clears
+ADR-001's bar.
 
 ## Commit subjects
 

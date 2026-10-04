@@ -39,6 +39,26 @@ Created 2026-10-03.
   currently prevents `csa-mcp` growing past its measured justification.
   [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) weakness 4.
 
+## Opened by the prior-art research (2026-10-04)
+
+- [ ] **Decide: one monorepo per language, or one for everything?** The official MCP reference
+  monorepo mixes TypeScript and Python in one tree; CSA's TypeScript servers are Workers-deployed
+  rather than npm-published. [`docs/ESTATE.md`](docs/ESTATE.md) states both sides.
+- [ ] **Read the Enterprise-Managed Authorization extension** before designing hosted agent
+  delegation — it is *stable* in `modelcontextprotocol/ext-auth` and is the nearest thing to the
+  "user authorises, then nominates which agents may use it" model. Listed, not read.
+- [ ] **The Client Credentials extension is in draft** and `csa-skilljar` already uses that grant.
+  Check its hosted behaviour against the extension rather than inventing it.
+- [ ] **Do not build on SDK identity assertion yet.** `IdentityAssertionParams` /
+  `exchange_identity_assertion` ship in `mcp` 2.3.0 but **no matching extension is listed** in
+  `ext-auth` — the SDK is ahead of, or divergent from, the registry.
+- [ ] **Assess whether a gateway belongs in front of the hosted fleet.** The dominant 2026
+  enterprise pattern, entirely unassessed for CSA. Not this repository's scope, but it is nobody's
+  right now.
+- [ ] **`CSA-MCP-Core` and `csa-mcp` were never inspected** — not cloned, not found by repo search.
+  Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
+  measurement.
+
 ## Protocol
 
 - [ ] **Measure which revision each server negotiates** with real clients. Currently unknown, and

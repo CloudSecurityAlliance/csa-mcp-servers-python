@@ -16,7 +16,7 @@ no place to put the largest category the measurement found.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│ 4. VENDOR SERVERS                                                        │
+│ 4. VENDOR SERVERS                       servers/<name>/                  │
 │    csa-zendesk · csa-google-workspace · csa-google-gmail-calendar        │
 │    csa-skilljar · csa-google-workspace-audit                             │
 │    backend.py (1020–2239 lines, 1% similar) · policy.py · _schemas.py    │
@@ -26,7 +26,7 @@ no place to put the largest category the measurement found.
 │    the shape of server.py (11%), cli.py (10%), _tools/_base.py (15%)     │
 │    layout, naming, tool-registration pattern, where policy is checked    │
 ├──────────────────────────────────────────────────────────────────────────┤
-│ 2. csa-mcp  — ours, extracted, deliberately small                        │
+│ 2. csa-mcp  — ours, extracted, deliberately small   packages/csa-mcp/    │
 │    markdown · oauth success page · discover/self-test · status vocabulary│
 ├──────────────────────────────────────────────────────────────────────────┤
 │ 1. mcp  — the official Python SDK, pinned with a ceiling                 │
@@ -43,12 +43,23 @@ Two reasons, both learned rather than assumed. FastMCP — the third-party frame
 could have standardised on — *became* the official SDK (`FastMCP` is now
 `mcp.server.mcpserver.MCPServer`), so building on the wrapper would have meant later migrating onto
 the thing we already had. And the SDK ships a deliberate tombstone when it breaks a major:
-`mcp/server/fastmcp.py` exists solely to raise a `ModuleNotFoundError` naming the migration guide,
-*"because the bare 'No module named' gave v1 code no hint that the installed SDK is a different
-major version."* That is a maintainer who thinks about upgrades.
+`mcp/server/fastmcp.py` in the installed 2.3.0 exists solely to raise a `ModuleNotFoundError`
+naming the migration guide, *"because the bare 'No module named' gave v1 code no hint that the
+installed SDK is a different major version."* That is a maintainer who thinks about upgrades, and
+the standard to meet when we publish.
 
-**Pinned with a ceiling, not a floor.** Measured 2026-10-03: `mcp` was at 2.3.0, released the
-previous day, across 73 releases. A dependency moving that fast needs an upper bound.
+Both claims are from the installed package rather than from documentation about it —
+[`python-sdk`](https://github.com/modelcontextprotocol/python-sdk),
+[`mcp` on PyPI](https://pypi.org/project/mcp/).
+
+**Pinned with a ceiling, not a floor.** Measured 2026-10-03 from
+[PyPI](https://pypi.org/project/mcp/): `mcp` was at 2.3.0, released the **previous day**, across 73
+releases. A dependency moving that fast needs an upper bound.
+
+The strongest external support for keeping this tier thin is that the
+[official reference monorepo](https://github.com/modelcontextprotocol/servers) holds seven servers
+with **no shared in-repo library at all** — each self-contained on the SDK. See
+[`PRIOR-ART.md`](PRIOR-ART.md) §2.
 
 See [`PROTOCOL.md`](PROTOCOL.md) for which revision it actually speaks, which is not the one its
 `LATEST_PROTOCOL_VERSION` advertises.
@@ -116,6 +127,12 @@ So this tier ships:
 A convention that is copied and then diverges is working correctly. A base class that is inherited
 and then worked around is not.
 
+**Independently corroborated.** Cloudflare's MCP monorepo ships an `implementation-guides/`
+directory — developer documentation for building servers in the repo — and standardises *"the same
+stateless Streamable HTTP handler at `/mcp`"* built from *"a fresh SDK v2 server factory"* per
+server. A shared factory and a written contract, not inheritance, across fifteen servers. See
+[`PRIOR-ART.md`](PRIOR-ART.md) §1.
+
 ## Tier 4 — the vendor servers
 
 Where the work is. `backend.py` alone runs 1020–2239 lines per server at 1% similarity, and that
@@ -154,10 +171,18 @@ access has to be distinguishable from its owner's.
 
 Two constraints already apply to the design and are recorded now so they are not discovered later:
 
-- **Do not build on OAuth Dynamic Client Registration.** RFC 7591 DCR is deprecated in revision
-  `2026-07-28` in favour of Client ID Metadata Documents.
+- **Do not build on OAuth Dynamic Client Registration.** RFC 7591 DCR is `MAY` and explicitly
+  *"deprecated and retained for backwards compatibility"* in
+  [`2026-07-28` authorization](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization);
+  Client ID Metadata Documents are the `SHOULD`. Note that current third-party guidance still
+  recommends DCR, because it is written against the previous revision —
+  [`PRIOR-ART.md`](PRIOR-ART.md) §3.
+- **No token passthrough.** A hosted server **MUST NOT** *"accept or transit any other tokens"*, so
+  it cannot forward a client's token to Google or Zendesk and must hold its own upstream credential.
 - **Credentials are keyed by issuer**, and a registration is never reused across authorization
   servers (SEP-2352).
+- **RFC 9728 Protected Resource Metadata is a `MUST`** for the server; RFC 8707 `resource` on both
+  authorization and token requests is a `MUST` for the client.
 
 `csa-google-workspace-audit` is the likeliest first hosted server, because it reads a whole tenant
 and is the one where centralised logging and policy earn the most.

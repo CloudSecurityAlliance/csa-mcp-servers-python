@@ -6,9 +6,10 @@ MCP server for Gmail and Google Calendar — messages, threads, drafts, labels, 
 
 ## Notes for the migration
 
-- Carries a **100% coverage gate with branches**. Per-package gates stay per-package through the
-  migration; step 5 verifies by running them, not by reading the config. A threshold below the
-  measured number cannot fail, which is the whole point of the gate.
+- Carries a **100% coverage gate with branches** — as do all four published servers, measured
+  2026-10-04. Per-package gates stay per-package through the migration; step 5 verifies by running
+  them, not by reading the config. A threshold below the measured number cannot fail, which is the
+  whole point of the gate.
 - Holds the second `elicit_url` call site affected by the `2026-07-28` removals.
 - Its `_markdown.py` is the tracked copy of `csa-zendesk`'s, carrying the provenance comment a
   deliberate copy was required to have — *"Ported from csa-zendesk's `_markdown.py` (same problem,

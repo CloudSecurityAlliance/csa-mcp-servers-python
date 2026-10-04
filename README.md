@@ -38,14 +38,18 @@ from evidence you cannot see side by side.
 
 ## What goes here
 
-| package | what it is | state |
+`servers/` holds the servers; `packages/` holds what they share. That split is structural rather
+than conventional, and it was adopted from Cloudflare's MCP monorepo — see
+[`docs/PRIOR-ART.md`](docs/PRIOR-ART.md).
+
+| | what it is | state |
 |---|---|---|
-| [`csa-mcp`](packages/csa-mcp) | the shared library, extracted from the servers | does not exist yet |
-| [`csa-zendesk`](packages/csa-zendesk) | Zendesk tickets, comments, attachments | published, lives elsewhere |
-| [`csa-google-workspace`](packages/csa-google-workspace) | Docs, Sheets, Slides, Drive comments | published, lives elsewhere |
-| [`csa-google-gmail-calendar`](packages/csa-google-gmail-calendar) | Gmail and Google Calendar | published, lives elsewhere |
-| [`csa-skilljar`](packages/csa-skilljar) | Skilljar courses, learners, enrolment | published, lives elsewhere |
-| [`csa-google-workspace-audit`](packages/csa-google-workspace-audit) | tenant-wide audit reads | specs only, never built |
+| [`packages/csa-mcp`](packages/csa-mcp) | the shared library, extracted from the servers | does not exist yet |
+| [`servers/csa-zendesk`](servers/csa-zendesk) | Zendesk tickets, comments, attachments | published, lives elsewhere |
+| [`servers/csa-google-workspace`](servers/csa-google-workspace) | Docs, Sheets, Slides, Drive comments | published, lives elsewhere |
+| [`servers/csa-google-gmail-calendar`](servers/csa-google-gmail-calendar) | Gmail and Google Calendar | published, lives elsewhere |
+| [`servers/csa-skilljar`](servers/csa-skilljar) | Skilljar courses, learners, enrolment | published, lives elsewhere |
+| [`servers/csa-google-workspace-audit`](servers/csa-google-workspace-audit) | tenant-wide audit reads | specs only, never built |
 
 Package names on PyPI do not change. Nothing that installs these servers today references a Git
 URL — verified, all 44 references across the installer repositories are PyPI names — so moving the
@@ -58,7 +62,10 @@ Read in this order. Each document assumes the one before it.
 | document | what it answers |
 |---|---|
 | [`docs/EVIDENCE.md`](docs/EVIDENCE.md) | What is actually duplicated, measured rather than guessed, with the method so it can be re-run |
+| [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) | How anyone else runs more than one MCP server — Cloudflare's monorepo, the official reference monorepo, and the three findings that **changed this plan** |
+| [`docs/ESTATE.md`](docs/ESTATE.md) | Where this repository sits among all of CSA's MCP servers, and which rules are fleet-wide |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | The four tiers, what belongs in each, and what must never be shared |
+| [`docs/CI-CD.md`](docs/CI-CD.md) | What runs on a pull request and a release — **derived** from the 15 workflows the four servers already have, not designed |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | Which protocol revision the servers speak, what `2026-07-28` changes, and links to the specification |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | The ordered steps, and the two that fail silently if skipped |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | The decisions this plan makes, each with its rejected alternatives |

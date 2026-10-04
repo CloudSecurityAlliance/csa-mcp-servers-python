@@ -69,7 +69,7 @@ is waiting for. See [PyPI Trusted Publishers](https://docs.pypi.org/trusted-publ
 |---|---|---|
 | 1 | Create this repository: README, CLAUDE.md, docs, stub package READMEs | yes |
 | 2 | **Qualify ~2,982 bare `#NN` references** in the four repos, on `main` | yes |
-| 3 | `git filter-repo` each server into `packages/<name>/`, preserving history | yes — originals untouched |
+| 3 | `git filter-repo` each server into `servers/<name>/`, preserving history | yes — originals untouched |
 | 4 | One `uv.lock`; resolve the tool and dependency divergence as explicit choices | yes |
 | 5 | Run every suite; confirm the two 100% coverage gates still read 100% | — |
 | 6 | Reconfigure four Trusted Publishers; prove it with a patch release | yes |
@@ -84,7 +84,7 @@ commitment point.** Nothing before it needs to be got right first time.
 
 560 commits across the four (`csa-google-workspace` 375, `csa-skilljar` 77, `csa-zendesk` 73,
 `csa-google-gmail-calendar` 35). Preserve all of it with `git filter-repo`, rewriting paths into
-`packages/<name>/`, rather than re-importing a snapshot.
+`servers/<name>/`, rather than re-importing a snapshot.
 
 The reasoning is not sentiment. For a repository like this one the valuable artifact is often the
 *reasoning*, and for these servers much of the reasoning lives in commit messages and in the
@@ -123,12 +123,17 @@ under anyone.
 
 ### On step 5 — the gates that must survive
 
-`csa-skilljar` and `csa-google-gmail-calendar` both hold **100% coverage with branches**, enforced
-in `pyproject.toml`. A monorepo makes it easy to accidentally loosen a per-package gate into a
-global average, which is exactly the failure mode a coverage gate exists to prevent: a threshold
-below the measured number cannot fail.
+**All four servers hold `fail_under = 100` with `branch = true`**, enforced in `pyproject.toml` and
+wired into CI in every one. Measured 2026-10-04 — an earlier draft of this document said two of
+four, which understated it. That direction of error matters: a document that understates progress
+reads as a to-do list, and the work gets done twice.
 
-Per-package gates stay per-package, and step 5 verifies by running them, not by reading the config.
+A monorepo makes it easy to loosen four per-package gates into one global average, which is exactly
+the failure a coverage gate exists to prevent — a threshold below the measured number cannot fail,
+and averaging lets one package's regression hide behind another's headroom.
+
+Per-package gates stay per-package, and step 5 verifies by **running** them and reading 100.00%, not
+by inspecting the config. See [`CI-CD.md`](CI-CD.md).
 
 ### On step 7 — the irreversible one
 
@@ -142,15 +147,9 @@ Archive the originals rather than deleting them. A deleted repository takes its 
 
 Path-filtered, so a change to one server does not run four test suites:
 
-```
-packages/csa-zendesk/**              → zendesk job
-packages/csa-google-workspace/**     → workspace job
-packages/csa-mcp/**                  → every job, because everything depends on it
-```
-
-Releases dispatch on tag prefix — `csa-zendesk-v0.3.2` — so one workflow serves five packages while
-each version stays independent. Versioning stays `0.X.Y` for every package; `1.0.0` is a claim about
-API stability made on purpose, not a milestone drifted into.
+See [`CI-CD.md`](CI-CD.md), which derives the pipeline from the 15 workflows the four servers
+already run — and names the trap that a path-filtered job **cannot** be a required status check
+without an aggregator, because a required check that never runs reads as pending forever.
 
 ## What this plan does not cover
 
