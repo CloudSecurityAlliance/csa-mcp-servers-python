@@ -130,6 +130,80 @@ invisible to anyone installing a server.
 
 Everything. See [`MIGRATION.md`](MIGRATION.md).
 
+### Correction (2026-10-04): the monorepo is right, the single lockfile is not obviously right
+
+The survey in [`PRIOR-ART.md`](PRIOR-ART.md) §0 confirms the monorepo and **undercuts the mechanism
+this ADR argued for.**
+
+Four of four organisations running multiple MCP servers use one repository, so that part stands
+without qualification. But **AWS runs 62 Python MCP servers with no workspace and a `uv.lock` per
+server.** There is no root `pyproject.toml`. Dependency resolution is deliberately not shared, and
+at that scale the reason is clear: one lockfile means one server's unsatisfiable dependency blocks
+all 62.
+
+What AWS shares at the root is tooling and writing — a single `.ruff.toml`, `.python-version`,
+`.pre-commit-config.yaml`, `.gitleaks.toml`, `trivy.yaml`, plus `DESIGN_GUIDELINES.md` and
+`DEVELOPER_GUIDE.md`.
+
+**And that is the direct fix for the drift this ADR cited as its evidence.** `ruff>=0.6` against
+`>=0.16` and `mypy>=1.11` against `>=2.0` are *tool configuration* divergence. A root `.ruff.toml`
+addresses them head-on; a shared lockfile addresses them as a side effect of coupling everything
+else too. The right problem, a heavier instrument than needed.
+
+The `markdownify>=1.2` against `>=0.13` gap is the one genuinely about *runtime* dependency floors,
+and it is one library mandated by one decision — a dependency policy question rather than an
+argument for shared resolution.
+
+**What stands:** the monorepo, and the claim that invisible drift was the problem.
+**What is now open:** one `uv.lock` or five. Five servers make the coupling tractable where 62 do
+not, so this is not settled by AWS's choice — but it can no longer be presented as the obvious one.
+Listed in [`REVIEW-BRIEF.md`](REVIEW-BRIEF.md) and superseded in part by ADR-006.
+
+---
+
+## ADR-006: shared tooling configuration at the root, independent of the lockfile question
+
+**Date:** 2026-10-04 · **Status:** proposed, pending review
+
+### Context
+
+The measured divergence that motivated this repository is mostly *tool configuration*: two
+different `ruff` floors, two different `mypy` floors, and a user-facing extra named differently in
+one of four servers. ADR-002 proposed to fix this with a single workspace lockfile. The survey shows
+the largest Python MCP fleet fixes it with root configuration files instead, and keeps resolution
+per-server.
+
+### Decision
+
+Adopt root tooling configuration regardless of how the lockfile question resolves:
+
+```
+.ruff.toml                 one lint configuration for every package
+.python-version            3.14, which all four already use
+.pre-commit-config.yaml    one hook set
+.gitleaks.toml             secret scanning, matching the public-repo standard
+docs/CONVENTIONS.md        the tier-3 convention document
+```
+
+Per-package `pyproject.toml` keeps only what is genuinely per-package: the dependency set, the
+coverage gate, the entry points.
+
+### Rationale
+
+It is the cheaper instrument for the measured problem, it is independent of the lockfile decision
+so it cannot be blocked by it, and it is what AWS does at twelve times our server count. It also
+gives the convention tier (ADR-004) a concrete home rather than leaving it an argument — Cloudflare
+has `implementation-guides/`, AWS has `DESIGN_GUIDELINES.md` and `DEVELOPER_GUIDE.md`, Microsoft has
+`core/` plus `eng/`.
+
+### Rejected alternatives
+
+- **Rely on the shared lockfile to constrain tool versions.** That is ADR-002's original position.
+  Rejected as indirect: a lockfile pins what is installed, while the divergence is in declared
+  floors, and it couples five packages' resolution to fix a lint-config problem.
+- **Leave tool config per-package and review it periodically.** Rejected — that is exactly the
+  state that drifted, and the drift was invisible rather than tolerated.
+
 ---
 
 ## ADR-003: `csa-mcp` is not published to PyPI to begin with

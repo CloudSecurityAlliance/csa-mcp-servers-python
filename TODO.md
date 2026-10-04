@@ -41,6 +41,19 @@ Created 2026-10-03.
 
 ## Opened by the prior-art research (2026-10-04)
 
+- [ ] **Decide: one `uv.lock` or one per server?** ADR-002 argued one; its appended correction says
+  AWS runs 62 Python MCP servers with none, sharing root tooling config instead. ADR-006 takes the
+  root-config half independently so this is not blocking.
+- [ ] **Adopt root tooling config** — `.ruff.toml`, `.python-version`, `.pre-commit-config.yaml`,
+  `.gitleaks.toml` (ADR-006). This is the direct fix for the `ruff`/`mypy` floor divergence, and it
+  is cheaper than the lockfile.
+- [ ] **Decide: three Google servers, or one with toolsets?** 241 tools across four servers, 109 of
+  them Google, and the 58–60% OAuth duplication exists *because* of the split. Trade-off is context
+  pressure against credential blast radius. [`docs/PRIOR-ART.md`](docs/PRIOR-ART.md) §5.
+- [ ] **Consider per-session toolset selection.** CSA already gates tools by configured capability —
+  an unenabled capability does not appear as a tool at all. What is missing is per-session selection
+  and runtime discovery, which is what GitHub's `--dynamic-toolsets` provides.
+
 - [ ] **Decide: one monorepo per language, or one for everything?** The official MCP reference
   monorepo mixes TypeScript and Python in one tree; CSA's TypeScript servers are Workers-deployed
   rather than npm-published. [`docs/ESTATE.md`](docs/ESTATE.md) states both sides.

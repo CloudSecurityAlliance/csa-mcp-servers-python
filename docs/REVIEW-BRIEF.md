@@ -89,6 +89,26 @@ at all**, which supports ADR-001's narrow bar; and the specification says a stdi
 **SHOULD NOT** use OAuth and should take credentials from the environment, which is what CSA already
 does.
 
+## The two biggest questions the survey opened
+
+**1. One `uv.lock` or five?** ADR-002 argued one, and carries a correction saying that is no longer
+obviously right: AWS runs **62** Python MCP servers with no workspace and a lockfile per server,
+sharing a root `.ruff.toml` instead. Five servers make the coupling far more tractable than 62, so
+AWS's choice does not settle ours — but the burden has shifted. ADR-006 now takes the root-config
+half independently, so this question can be answered either way without blocking anything.
+
+**2. Should there be three Google servers?** `csa-google-workspace` (59 tools),
+`csa-google-gmail-calendar` (50) and `csa-google-workspace-audit` (planned) are one vendor split
+three ways — and they are the three sharing the 58–60% OAuth trio *because* of that split. GitHub
+runs **one** server with `--toolsets`; Microsoft's Azure server covers 57 services in 276 tools. The
+counter-argument is CSA's own: one Google app per server is one revocable credential with the
+narrowest scopes, and merging means a single client holding the union of Docs, Sheets, Slides,
+Drive, Gmail, Calendar and tenant-audit scopes. **Context pressure against credential blast
+radius.** Not decided; see [`PRIOR-ART.md`](PRIOR-ART.md) §5.
+
+The context-pressure number is measured: **241 tools across the four servers**, commonly all
+connected at once, `csa-skilljar` alone at 114.
+
 ## Questions I would most like answered
 
 - Does the ≥95%-or-no-incumbent bar in ADR-001 hold up, or is it a rule invented to make the answer
