@@ -51,7 +51,9 @@ registration across authorization servers.
 
 ## Current gaps
 
-- **No branch protection on `main`** - see [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md).
+- ~~No branch protection on `main`~~ — **closed 2026-10-04**: PR required, force-push and
+  deletion blocked, enforced on admins. See [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md) for why
+  the first attempt read as correct and was not.
 - **No CI, so no secret-scanning gate.** CSA's public-repo standards apply and cannot be satisfied
   before there is a workflow to run them in.
 - **`csa-google-workspace-audit` has no licence**, which is a publication question rather than a

@@ -15,9 +15,10 @@ Created 2026-10-03.
 
 ## Found while writing the core files
 
-- [ ] **Protect `main`.** Four of four published servers disable force-push with 4-5 required
-  checks; this repository has nothing. One setting, on the repository with two copies, one commit
-  and no reviewer. [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md), [`GOALS.md`](GOALS.md) G4.
+- [x] **Protect `main`** — done 2026-10-04. PR required, 0 approvals, force-push and deletion
+  blocked, enforced on admins. Took two attempts: the first used `enforce_admins: false` and
+  **permitted a direct push to `main` while reading back as correct**. Both rules verified by
+  attempting them. [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md), [`GOALS.md`](GOALS.md) G4.
 - [ ] **~160 claims about other repositories, and nothing checks them** - 91 percentages, 65 line
   counts, 4 line-number-precise call sites. The measurement script is published and deterministic,
   so a check that re-runs it and fails on drift is feasible; it needs the four repositories
@@ -50,4 +51,5 @@ Created 2026-10-03.
 ## Smaller
 
 - [ ] **`csa-google-workspace-audit` has no licence.** The other four are Apache-2.0.
-- [ ] CI and branch protection to CSA public-repo standards, once there is something to gate.
+- [ ] CI to CSA public-repo standards, once there is something to gate — then add the checks to
+  the branch rule, which currently requires **0** status checks because none exist.
