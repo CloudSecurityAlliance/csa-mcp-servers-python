@@ -276,6 +276,62 @@ not.
 
 ---
 
+## ADR-007: low similarity means different things for a convention and for a safety control
+
+**Date:** 2026-10-04 · **Status:** proposed, pending review
+
+**Partially supersedes:** ADR-004's reach, and a claim in `SECURITY-RESOURCES.md`.
+
+### Context
+
+ADR-004 reads low similarity as evidence *against* extraction: `server.py` at 10% is a structural
+resemblance, so sharing it would abstract the resemblance rather than any behaviour. That is right
+for `server.py`.
+
+Applying the same rule to `_untrusted.py` gave the wrong answer. Measured 2026-10-04, the
+untrusted-content boundary is **1%, 2% and 11%** similar across three servers, with a fourth having
+no module at all and one of the three sitting at a different architectural layer. It is the least
+consistent control in the fleet — less consistent than `auth.py` (16%) or `policy.py` (3%) — and it
+is the only one whose failure lets injected content act with the user's credential.
+
+### Decision
+
+Low similarity is not self-interpreting. The test is: **does a single correct behaviour exist?**
+
+- **No** — the variation is legitimate and the code stays put. *"What should my CLI do?"*,
+  *"how is this server configured?"* Extraction would force unlike things into one mould.
+- **Yes** — low similarity is evidence of a **missing shared primitive**, and the cost of leaving
+  it is highest exactly where the control is safety-critical. *"How do I mark vendor content so a
+  model treats it as data rather than instructions?"* has one right answer.
+
+So `csa-mcp` takes the untrusted-content **wrapping primitive**. Vendor content *shapes* — what a
+Zendesk comment or a Gmail MIME part looks like — stay with their vendors.
+
+### Rationale
+
+ADR-001's ≥95%-or-no-incumbent bar is a good default and it is a *floor on evidence*, not a ceiling
+on judgement. A control implemented four ways where one way is correct is not four pieces of
+evidence that it should stay split; it is four chances to have got it wrong, and 241 tool
+registrations' worth of surface behind it.
+
+### Rejected alternatives
+
+- **Keep the ≥95% bar absolute.** Consistent and simple. Rejected: it would leave the fleet's
+  most safety-critical control as four independent implementations, which is the outcome the bar
+  exists to prevent, reached by obeying the bar.
+- **Extract `policy.py` too, by the same argument.** Rejected — policy at 3% is genuinely
+  vendor-specific: Zendesk allowlists and Skilljar capability gates are not the same control wearing
+  different clothes. The *vocabulary* for reporting a refusal should converge; the rules should not.
+- **Rewrite all four to match before extracting.** Rejected as the expensive order. Extract the
+  primitive, then converge onto it one server at a time, per ADR-001.
+
+### Affects
+
+`csa-mcp` gains a fifth seeded module. `SECURITY-RESOURCES.md` carries the correction.
+[`research/enforcement/`](../research/enforcement/) is the evidence.
+
+---
+
 ## ADR-005: a uv workspace does not contradict one-environment-per-server
 
 **Date:** 2026-10-03 · **Status:** proposed, pending review

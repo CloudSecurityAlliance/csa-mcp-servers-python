@@ -21,7 +21,7 @@ skeleton is harder to review than a plan, which is the whole reason this reposit
 | [`docs/ESTATE.md`](docs/ESTATE.md) | the whole CSA MCP estate; this repo is one half of it |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | the four tiers and what must never be shared |
 | [`docs/CI-CD.md`](docs/CI-CD.md) | the pipeline, derived from the servers' existing 15 workflows |
-| [`research/`](research/) | the evidence under all of it; `research/fleet-survey/measure.py` re-derives every number |
+| [`research/`](research/) | the evidence under all of it. **[`research/METHOD.md`](research/METHOD.md) is the research standard** — best practice *and* what the big players actually ship |
 | [`docs/PROTOCOL.md`](docs/PROTOCOL.md) | which protocol revision the fleet speaks |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | the ordered steps, and the two that fail silently |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | ADR-001 to ADR-005, each with rejected alternatives |

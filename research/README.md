@@ -11,13 +11,23 @@ here after a decision is made, as the backing material the decision can be check
 
 ## Current topics
 
+**The method is [`METHOD.md`](METHOD.md), and it is the standard for every topic here:** find the
+stated best practice, then measure what the big players actually ship. The gap between the two is
+usually the finding.
+
 | topic | question | status | last measured |
 |---|---|---|---|
-| [`fleet-survey/`](fleet-survey/) | How do other organisations run many MCP servers, and how old is the practice? | first pass — complete enough to have changed the plan | **2026-10-04** |
+| [`fleet-survey/`](fleet-survey/) | How do other organisations run many MCP servers, and how old is the practice? | first pass — changed the plan in four places | **2026-10-04** |
+| [`enforcement/`](enforcement/) | Vendors have no per-agent IAM, so where does policy actually get enforced — and is local policy real? | first pass — reversed one earlier decision | **2026-10-04** |
 
 ## How research here is written
 
-Three rules, all of them learned the hard way during the first survey.
+[`METHOD.md`](METHOD.md) is the full standard. The short version, all of it learned the hard way
+during the first two surveys.
+
+**0. Find the best practice, then measure what the big players actually do.** Two different
+findings. Reporting only the first is how you end up recommending RFC 7591 Dynamic Client
+Registration four months after the specification deprecated it.
 
 **1. Date everything, and say what the date means.** A survey without a date is a claim about an
 unknown moment. The Python SDK ships a release every 9.5 days and the TypeScript SDK every 1.9 —

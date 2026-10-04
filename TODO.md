@@ -79,6 +79,23 @@ Created 2026-10-03.
   Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
   measurement.
 
+## Enforcement (2026-10-04, `research/enforcement/`)
+
+- [ ] **Extract the untrusted-content wrapping primitive into `csa-mcp`** (ADR-007). Measured at
+  **1%/2%/11%** similar across three servers, with a fourth having no module — the least consistent
+  control in the fleet, and the only one whose failure lets injected content act with the user's
+  credential. This **reverses** an earlier not-an-extraction-candidate call.
+- [ ] **Say in the docs what local policy is for**, rather than apologising for it: it binds the
+  *model*, not the user, and that is the correct scope. Policy is env-only and three of four servers
+  already tell the model it *"cannot be changed from here"* — keep that property.
+- [ ] **Test whether the policy actually holds under injection.** 241 tool registrations,
+  `destructive_hint` ×37, `confirm=` ×9, `dry_run` ×3. Whether a determined injected instruction can
+  route around the allowlists is **untested**, and that is a real gap.
+- [ ] **Adopt Off / Monitoring / Enforcing staging** for any new policy, local or hosted — observe
+  before blocking. Taken from commercial gateway products.
+- [ ] **Read AWS's and Microsoft's agent-governance offerings.** Only Google's Agent Gateway was
+  examined, because Google is the vendor CSA depends on most.
+
 ## Protocol
 
 - [ ] **Measure which revision each server negotiates** with real clients. Currently unknown, and
