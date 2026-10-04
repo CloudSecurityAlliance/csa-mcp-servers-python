@@ -79,6 +79,31 @@ Created 2026-10-03.
   Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
   measurement.
 
+## Service identity (2026-10-04, `research/service-identity/`)
+
+- [ ] **Phase 0 is a precondition, not a task: can a service account join a CSA Google Group and
+  inherit its Drive ACLs?** A service account is **not** a Workspace-domain user, and *"service
+  agents cannot be added to Google Groups unless external members are allowed."* The whole
+  entitlement-reuse premise rests on this. Ten-step test and exit criterion are in the source
+  report. **Build nothing downstream until it passes.**
+- [x] **DWD conflict resolved.** Not "never DWD" — *default* service identity, *exception* DWD where
+  named-user identity has a concrete benefit. A tenant audit is the textbook exception.
+  **Remaining:** `csa-google-workspace-audit`'s ADR should name the concrete benefit that cannot be
+  achieved with a service identity.
+- [ ] **Adopt subject / actor / execution principal as distinct concepts.** No vendor will ever see
+  the actor, so the agent's identity exists only if CSA's control plane records it. Agent identity is
+  a provenance obligation we already have, not a protocol feature to wait for.
+- [ ] **Candidates for `csa-mcp` under ADR-001's no-incumbent exception:** execution-profile
+  resolution, and the provenance record shape (§6.5 of the report). The second is a *vocabulary*
+  problem — the same class as three different answers to "am I authenticated?"
+- [ ] **Note that this is a different product from what exists.** All four servers are per-user
+  credential; **none uses a service account**. `csa-google-workspace` is `InstalledAppFlow` with
+  token material across 22 files and **no impersonation path** (verified). A credential broker cannot
+  exist in a local stdio server.
+- [ ] **Group-union risk has no tooling.** Adding an execution identity to a widely used group grants
+  the union of that group's access; the mitigation is "enumerate effective access", which across a
+  messy Drive hierarchy is the hard part. Unsolved in the source report too.
+
 ## Platform reach (2026-10-04, `research/managed-agents/`)
 
 - [ ] **None of the five stdio servers can attach to Claude Managed Agents.** Verified: the

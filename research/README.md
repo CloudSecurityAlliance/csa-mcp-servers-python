@@ -21,6 +21,7 @@ usually the finding.
 | [`enforcement/`](enforcement/) | Vendors have no per-agent IAM, so where does policy actually get enforced — and is local policy real? | first pass — reversed one earlier decision | **2026-10-04** |
 | [`orchestration/`](orchestration/) | Many endpoints or one mega-server? Progressive disclosure, identity-keyed tool lists, and whether this is the web's consolidation again | first pass — confirmed a `cacheScope` correctness requirement | **2026-10-04** |
 | [`managed-agents/`](managed-agents/) | Can the Anthropic platform even use these servers? Reconciliation of an external research synthesis against primary sources | first pass — **found that none of the five stdio servers can attach** | **2026-10-04** |
+| [`service-identity/`](service-identity/) | Subject, actor, execution principal — shared service identities, and whether CSA's Google Groups can carry them | first pass — **resolved the DWD conflict**; found an untested precondition | **2026-10-04** |
 
 ## How research here is written
 

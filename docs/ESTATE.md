@@ -101,6 +101,13 @@ the cheapest and the worst. See [`../research/managed-agents/`](../research/mana
 This does not change what this repository is for. It changes when the hosted work is needed, and it
 is an argument for `csa-google-workspace-audit` — the unbuilt one — being designed remote-first.
 
+**Three independent lines of research now converge on it**, which is worth more than any one of
+them: the platform cannot attach a stdio server at all; hosting changes *who* policy binds rather
+than what it says ([`../research/enforcement/`](../research/enforcement/)); and a credential broker
+that keeps credentials away from the agent is **structurally impossible** in a process the user
+runs, because the credential is in the user's environment by design
+([`../research/service-identity/`](../research/service-identity/)).
+
 ## Where this repository fits
 
 It covers **the five Python stdio servers and nothing else.** Concretely out of scope: the
