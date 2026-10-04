@@ -65,14 +65,76 @@ read as fact.
 
 Untagged, all three read as equally solid, and they are not.
 
-## Date everything
+## Date everything, and know what the date buys you
 
-A survey without a date is a claim about an unknown moment. For this ecosystem that is not
-pedantry: the Python SDK ships a release every **9.5 days** and the TypeScript SDK every **1.9**,
-so a six-month-old statement describes a different protocol.
+A survey without a date is a claim about an unknown moment. Each topic states when it was measured,
+and `AS_OF` in any measurement script is **pinned** rather than `date.today()`, so a later run is
+comparable with what was written.
 
-Each topic states when it was measured, and `AS_OF` in any measurement script is **pinned** rather
-than `date.today()`, so a later run is comparable with what was written.
+### Knowledge has a half-life, and it is per-layer
+
+The governing rule, carried over from cloud infrastructure: **knowledge more than three years old
+was probably wrong** — not factually wrong, but by then there was a better way to do it. The
+progression IaaS → PaaS → SaaS is the shape: each rung commoditises and staying on the lower one
+becomes a cost rather than a choice.
+
+For AI the intuition was three months. Then thirty days. **Tested against this repository's own
+measurements, the instinct is right and a single number is wrong**, because the layers move at rates
+two orders of magnitude apart.
+
+| layer | measured cadence | so evidence expires in |
+|---|---|---|
+| **Installed dependency version** | `mcp` 2.3.0 shipped **the day before** review; `oauthlib` 4.0.0 five days before | **1 day** — never trust a remembered version |
+| **TypeScript SDK release** | 100 releases / 184 days | **~2 days** |
+| **Python SDK release** | 73 releases / 681 days | **~10 days** |
+| **Our own repository state** | 4 of 6 CSA MCP repos under 40 days old | **~30 days** |
+| **Vendor product capability** | Cloudflare MCP portals GA'd 10 days before survey; Azure MCP 2.0 GA April 2026 | **~30 days** |
+| **Secondary literature** | still called RFC 7591 DCR mandatory **after** the spec deprecated it | **~4 months, and it does not announce it** |
+| **Protocol revision** | 5 revisions, gaps of **141, 84, 160, 245 days** (mean 157) | **~5 months** |
+| **Architectural pattern** | monorepo-for-fleets settled in a 36-day window in spring 2025 and has not moved since | **~1–2 years** |
+
+So **thirty days is the right order of magnitude for the layers that caused our errors**, and wrong
+in both directions elsewhere: too long for "what version is installed", too short for "is a monorepo
+the right shape".
+
+### The asymmetry that matters most
+
+The protocol changes about every five months. The **commentary about it is wrong within four** — and
+unlike the protocol, it does not publish a changelog saying so.
+
+That is why the source tiers above exist, and it is the sharpest argument for them: the facts are
+not what rots fastest, the explanations are. Treat any secondary source older than a protocol
+revision as describing a different protocol.
+
+### The cloud analogy predicts a CSA incident, which is why it is kept
+
+The IaaS → PaaS → SaaS ladder has a direct MCP equivalent, and CSA has already paid for standing on
+the wrong rung:
+
+```
+hand-rolled HTTP / transport     <- CSA-MCP-Core and the Group B servers
+official SDK                     <- the five Python servers
+managed agent runtime            <- Managed Agents, AgentCore, Foundry
+```
+
+CINO-PE#168 records the cost: *"a March fix never reached csa-mcp"* — a `GET /mcp` reconnect loop
+affecting **~21% of main-site traffic**, in hand-rolled routing. A fix existed one rung up and could
+not reach code that had reimplemented the rung.
+
+And the rungs collapse upward on their own: **FastMCP did not get competed with, it got absorbed** —
+`FastMCP` is now `mcp.server.mcpserver.MCPServer`. Standardising on the wrapper would have meant
+migrating later onto the thing we already had. "There is probably a better way now" is not a
+pessimism about one's own work; it is a prediction that the layer below has eaten a problem you are
+still solving.
+
+### What to do with it
+
+- **Re-measure rather than re-read.** `measure.py` costs twenty seconds; re-reading a six-month-old
+  article costs a wrong decision.
+- **Put an expiry on a claim, not just a date.** "Measured 2026-10-04" is better than nothing;
+  "measured 2026-10-04, re-check when a revision ships" is actionable.
+- **When a layer below commoditises, move.** The question is never "does our implementation still
+  work" — it is "is this still our problem to solve".
 
 ## Publish the method and run it
 

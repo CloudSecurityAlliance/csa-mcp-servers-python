@@ -79,6 +79,26 @@ Created 2026-10-03.
   Everything [`docs/ESTATE.md`](docs/ESTATE.md) says about them is CSA's own record rather than
   measurement.
 
+## Consumers (2026-10-04, `research/consumers/`)
+
+- [ ] **C3 is unvalidated and blocking.** Can a working-group member on a locked-down corporate
+  endpoint install anything, or is **browser-only** the design floor? Every constraint listed for C3
+  is plausible and **none is confirmed** — nobody has asked a real WG member. It is the consumer with
+  a constraint CSA cannot negotiate, and it lands on CSA's core constituency.
+- [ ] **No test tenant exists (C5).** A dev agent experimenting against these servers today uses
+  **production credentials against production data**. Prerequisite for AI-assisted development here;
+  currently nobody owns it.
+- [ ] **Each ADR should name which consumers it serves.** Most currently imply C1/C2 without saying
+  so, which is how the whole plan came to be decided consumer-blind.
+- [ ] **Disambiguate "consumer".** ADR-001 means *second consumer of a library*;
+  `research/consumers/` means *human or agent user*. The collision went unnoticed.
+- [ ] **C6 needs no design, only invariants** — see the core finding. Revisit when ID-JAG (`-04`) and
+  OAuth Identity Chaining (`-12`) become RFCs rather than drafts.
+- [ ] **Put expiries on claims, not just dates.** Per `research/METHOD.md`: the installed-version
+  layer expires in **1 day**, our own repo state in ~30, secondary literature in ~4 months, the
+  protocol in ~5. "Measured 2026-10-04, re-check when a revision ships" is actionable; a bare date
+  is not.
+
 ## Service identity (2026-10-04, `research/service-identity/`)
 
 - [ ] **Phase 0 is a precondition, not a task: can a service account join a CSA Google Group and

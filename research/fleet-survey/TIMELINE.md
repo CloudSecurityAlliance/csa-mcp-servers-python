@@ -30,7 +30,24 @@ months. Any claim that something is "established practice" has that ceiling.
 | 2025-04-09 | 543 | `microsoft/mcp` created |
 | 2025-05-28 | 494 | `modelcontextprotocol/servers-archived` created **and archived the same day** |
 | 2025-10-01 | 368 | `modelcontextprotocol/ext-auth` created |
-| 2026-07-28 | 433 → | the current protocol revision |
+| 2026-07-28 | **68** | the current protocol revision |
+
+### Revision cadence, which this table originally omitted
+
+Five revisions exist — verified by fetching each. `2026-07-28` is **68 days old** as of this survey,
+not the 433 an earlier draft of this table said; that figure was arithmetic error and corresponded
+to nothing.
+
+| from → to | days |
+|---|---|
+| 2024-11-05 → 2025-03-26 | 141 |
+| 2025-03-26 → 2025-06-18 | 84 |
+| 2025-06-18 → 2025-11-25 | 160 |
+| 2025-11-25 → 2026-07-28 | 245 |
+
+Mean **157 days**, range 84–245. So the protocol itself moves about every five months — while the
+commentary about it goes wrong in four. See [`../METHOD.md`](../METHOD.md), *knowledge has a
+half-life, and it is per-layer*.
 
 ## Three findings, and the first one reframes the question
 

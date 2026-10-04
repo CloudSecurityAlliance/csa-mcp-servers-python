@@ -22,6 +22,7 @@ usually the finding.
 | [`orchestration/`](orchestration/) | Many endpoints or one mega-server? Progressive disclosure, identity-keyed tool lists, and whether this is the web's consolidation again | first pass — confirmed a `cacheScope` correctness requirement | **2026-10-04** |
 | [`managed-agents/`](managed-agents/) | Can the Anthropic platform even use these servers? Reconciliation of an external research synthesis against primary sources | first pass — **found that none of the five stdio servers can attach** | **2026-10-04** |
 | [`service-identity/`](service-identity/) | Subject, actor, execution principal — shared service identities, and whether CSA's Google Groups can carry them | first pass — **resolved the DWD conflict**; found an untested precondition | **2026-10-04** |
+| [`consumers/`](consumers/) | **Who are these servers for?** Six consumers, two never analysed, and one that cannot be described | first pass — **C6 logged as a core finding: we do not know** | **2026-10-04** |
 
 ## How research here is written
 
@@ -55,6 +56,20 @@ not cited at all; one of them described Cloudflare's monorepo accurately but omi
 details that turned out to matter.
 
 See [`fleet-survey/SOURCES.md`](fleet-survey/SOURCES.md) for the tiering applied in practice.
+
+## The core finding, kept at the top deliberately
+
+**[`consumers/`](consumers/) §1 records that the largest consumer of these servers — the future
+agent fleet — is undefined, and that no amount of research in October 2026 will define it.**
+
+It is logged as a finding rather than as a gap because the honest state of knowledge is the result.
+C6 gets **invariants** — things not to bake in, each derived from something measured — rather than a
+design, because a persona for a consumer nobody can describe would be fiction.
+
+The second finding in the same document is that **nothing anywhere defined any of the consumers**,
+so every architectural decision in this repository was made consumer-blind. The word "consumer" was
+already in use here for *"second consumer of a shared library"*, which is how unoccupied the ground
+was.
 
 ## What a finding here has to carry
 
