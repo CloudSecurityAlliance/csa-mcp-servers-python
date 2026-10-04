@@ -74,7 +74,7 @@ findings, which is why they are worth reading before trusting anything else here
 | [`GOALS.md`](GOALS.md) | What *done* means — six properties, **four of them not met** and saying so |
 | [`BUSINESS-CASE.md`](BUSINESS-CASE.md) | Why move four working servers; what the invisible drift already cost |
 | [`OPERATIONAL-RESOURCES.md`](OPERATIONAL-RESOURCES.md) | Nothing is hosted, so the surface turned out **citational**: ~160 claims about four other repositories, four of them line-number-precise, and **nothing checks any of them** |
-| [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md) | The inversion — this is the only record of a 2026-10-03 measurement that cannot be re-derived later, and `main` is the one repository in the fleet with **no force-push protection** |
+| [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md) | The inversion — this is the only record of a 2026-10-03 measurement that cannot be re-derived later. `main` is now protected, and the record of **why the first attempt read as correct and was not** is the more useful half |
 | [`SECURITY-RESOURCES.md`](SECURITY-RESOURCES.md) | What must never land in a public repository, and what is deliberately deferred to each server's own file |
 | [`RACI.md`](RACI.md) | One name in every role, and what that costs |
 | [`FRICTION.md`](FRICTION.md) | What cost time — including two of my own wrong premises that measurement caught before publication |
