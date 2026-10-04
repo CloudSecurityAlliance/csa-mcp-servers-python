@@ -64,6 +64,27 @@ Read in this order. Each document assumes the one before it.
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | The decisions this plan makes, each with its rejected alternatives |
 | [`docs/REVIEW-BRIEF.md`](docs/REVIEW-BRIEF.md) | **Start here if you are reviewing this plan.** What to attack, and what is deliberately absent |
 
+### The project's own files
+
+The CINO core set, written from this project rather than from a template. Two of them produced
+findings, which is why they are worth reading before trusting anything else here.
+
+| document | what it answers |
+|---|---|
+| [`GOALS.md`](GOALS.md) | What *done* means — six properties, **four of them not met** and saying so |
+| [`BUSINESS-CASE.md`](BUSINESS-CASE.md) | Why move four working servers; what the invisible drift already cost |
+| [`OPERATIONAL-RESOURCES.md`](OPERATIONAL-RESOURCES.md) | Nothing is hosted, so the surface turned out **citational**: ~160 claims about four other repositories, four of them line-number-precise, and **nothing checks any of them** |
+| [`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md) | The inversion — this is the only record of a 2026-10-03 measurement that cannot be re-derived later, and `main` is the one repository in the fleet with **no force-push protection** |
+| [`SECURITY-RESOURCES.md`](SECURITY-RESOURCES.md) | What must never land in a public repository, and what is deliberately deferred to each server's own file |
+| [`RACI.md`](RACI.md) | One name in every role, and what that costs |
+| [`FRICTION.md`](FRICTION.md) | What cost time — including two of my own wrong premises that measurement caught before publication |
+| [`WAITING-FOR.md`](WAITING-FOR.md) | Blockers with someone else's name on them |
+| [`TODO.md`](TODO.md) | Index of all open work, one line per item |
+
+There is deliberately **no `DECISIONS-ADR.md`** — [`docs/DECISIONS.md`](docs/DECISIONS.md) is the
+decision log, and a second one is how two decisions end up disagreeing with neither marked as the
+loser.
+
 ## Upstream
 
 This fleet is built on the official Python SDK, not a wrapper around it.

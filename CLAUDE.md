@@ -22,6 +22,19 @@ skeleton is harder to review than a plan, which is the whole reason this reposit
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | the ordered steps, and the two that fail silently |
 | [`docs/DECISIONS.md`](docs/DECISIONS.md) | ADR-001 to ADR-005, each with rejected alternatives |
 
+Then the project's own files. Two are worth reading before trusting anything here:
+[`GOALS.md`](GOALS.md) states that four of six properties are **not met**, and
+[`OPERATIONAL-RESOURCES.md`](OPERATIONAL-RESOURCES.md) records that this repository's outward
+surface is **citational** — ~160 claims about four other repositories, four of them
+line-number-precise, none of them checked by anything. Also [`BUSINESS-CASE.md`](BUSINESS-CASE.md),
+[`BACKUP-RESOURCES.md`](BACKUP-RESOURCES.md), [`SECURITY-RESOURCES.md`](SECURITY-RESOURCES.md),
+[`RACI.md`](RACI.md), [`FRICTION.md`](FRICTION.md), [`WAITING-FOR.md`](WAITING-FOR.md) and
+[`TODO.md`](TODO.md) — the index of all open work.
+
+There is deliberately **no `DECISIONS-ADR.md`**: `docs/DECISIONS.md` already is the log. Note that
+the four servers use *four different shapes* for theirs, which collides at migration — see
+[`FRICTION.md`](FRICTION.md).
+
 ## How to work here
 
 **Measure before asserting.** Every number in `docs/` is reproducible and most of them have a
