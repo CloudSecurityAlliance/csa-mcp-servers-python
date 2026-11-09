@@ -150,7 +150,7 @@ Not oversights:
 ## Context a reviewer may lack
 
 The engineering practice these decisions answer to is internal to CSA
-([CINO-Platform-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Platform-Engineering),
+([CINO-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Engineering),
 links will not resolve for everyone). The parts load-bearing here:
 
 - **Do not create structure in advance of the experience that would fill it.** The test is whether

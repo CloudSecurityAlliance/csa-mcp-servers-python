@@ -104,7 +104,7 @@ This fleet is built on the official Python SDK, not a wrapper around it.
 ## Context
 
 Engineering practice for this fleet is maintained in
-[CINO-Platform-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Platform-Engineering)
+[CINO-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Engineering)
 (internal; links below will not resolve for everyone). The MCP-specific material lives under
 `surfaces/mcp/` there — `LIFECYCLE.md` is the router, `ROADMAP.md` sets the order servers are built
 in, `CONFORMANCE.md` is what every server owes, and `PROTOCOL-REVISIONS.md` tracks what each

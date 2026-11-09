@@ -63,7 +63,7 @@ Three things in that table are the fleet's live problems, and none is this repos
 ## Which rules are fleet-wide
 
 These apply to every CSA MCP server regardless of language or delivery, and are maintained in
-[CINO-Platform-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Platform-Engineering)
+[CINO-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Engineering)
 under `surfaces/mcp/` rather than here:
 
 - **Vendor content reaching a model is untrusted data, never instructions.**
