@@ -154,7 +154,7 @@ One lockfile makes the divergent state unrepresentable — `markdownify>=1.2` in
 
 ### This does not conflict with one-environment-per-server
 
-DEC-012 in CINO-Platform-Engineering requires **one isolated environment per installed server**,
+DEC-012 in CINO-Engineering requires **one isolated environment per installed server**,
 after a `uv` rebuild turned four working servers into husks in a single run. It governs
 *installation*: end users run `uv tool install csa-zendesk`, and a bad resolve in one server cannot
 reach another.

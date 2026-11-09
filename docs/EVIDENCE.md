@@ -94,7 +94,7 @@ The distribution is bimodal, and that is the useful part. There is almost nothin
 
 Three modules, around 290 lines in total. `_markdown.py` at 96% is the most consequential: it
 implements the HTML→Markdown conversion that [DEC-018 in
-CINO-Platform-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Platform-Engineering/blob/main/DECISIONS.md)
+CINO-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Engineering/blob/main/DECISIONS.md)
 mandates fleet-wide. The roadmap that deferred extraction **predicted this specific copy** and
 authorised it as a tracked, deliberate duplication.
 

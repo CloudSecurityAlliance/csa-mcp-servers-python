@@ -91,7 +91,7 @@ log is meant to read as an index of what this plan has learned.
   [`mcp` on PyPI](https://pypi.org/project/mcp/)
 
 Engineering practice for this fleet is maintained in
-[CINO-Platform-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Platform-Engineering)
+[CINO-Engineering](https://github.com/CloudSecurityAlliance-Internal/CINO-Engineering)
 (internal). `surfaces/mcp/LIFECYCLE.md` is the router; `CONFORMANCE.md` is what every server owes;
 `PROTOCOL-REVISIONS.md` tracks what each protocol revision costs. Cross-project decisions are
 `DEC-NNN` there and are cited by number from here, never restated.
